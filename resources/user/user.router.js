@@ -71,6 +71,19 @@ router.post("/signup", controllers.signup);
  *              schema:
  *                $ref: '#/components/schemas/TokenResponse'
  *       '409':
+ *          description: Duplicate username
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/DuplicateErrorResponse'
+ *       '422':
+ *          description: Incomplete user data
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/IncompleteErrorResponse'
+ *       '400':
+ *          description: Bad request
  *          content:
  *            application/json:
  *              schema:
@@ -85,6 +98,24 @@ router.post("/signin", controllers.signin);
  *     tags: [User]
  *     summary: Endpoint to update user data based on their token
  *     description: Endpoint for updating the data based on the token brought, username, password, and full name is able to be updated
+ *     parameters:
+ *      - in: header
+ *        name: authorization
+ *        description: Token for the app, should be written as Bearer(space)[token]
+ *        schema:
+ *          $ref: '#/components/schemas/HeaderTokenDto'
+ *     requestBody:
+ *      content:
+ *        application/json:
+ *          schema:
+ *            $ref: '#/components/schemas/UpdateUserDto'
+ *     responses:
+ *       '200':
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/UpdateUserResponse'
+ 
  */
 router.put("/", controllers.update);
 

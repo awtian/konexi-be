@@ -35,6 +35,22 @@ components:
       example:
         username: test
         password: secret
+    UpdateUserDto:
+      type: object
+      properties:
+        username:
+          type: string
+          description: Unique username for each user
+        password:
+          type: string
+          description: Secret password for the user
+        fullName:
+          type: string
+          description: Full name for the user
+      example:
+        username: test
+        password: secret
+        fullName: Test the Secret
     TokenResponse:
       type: object
       required:
@@ -75,3 +91,32 @@ components:
           description: Error message
       example:
         message: "[...required stuff] is required!"
+    HeaderTokenDto:
+      type: string
+      required: true
+      example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NWJhMzhmZjE1MzhkZjhlMjYyNGZjZSIsImlhdCI6MTY4Mzc0MDcxNSwiZXhwIjoxNjkyMzgwNzE1fQ.zGPfS1_LSvgn8gv1Am5s4iRZIOt60_MQASAEpvhM0xs
+    SafeUserObject:
+      type: object
+    UpdateUserResponse:
+      type: object
+      required:
+        - message
+        - data
+      properties:
+        message:
+          type: string
+        data:
+          type: object
+          required:
+            - username
+            - fullName
+          properties:
+            username:
+              type: string
+            fullName:
+              type: string
+      example:
+        message: "User updated"
+        data:
+          username: test
+          fullName: Test the Secret

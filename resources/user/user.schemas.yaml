@@ -1,0 +1,77 @@
+components:
+  schemas:
+    SignUpDto:
+      type: object
+      required:
+        - username
+        - password
+        - fullName
+      properties:
+        username:
+          type: string
+          description: Unique username for each user
+        password:
+          type: string
+          description: Secret password for the user
+        fullName:
+          type: string
+          description: Full name for the user
+      example:
+        username: test
+        password: secret
+        fullName: Test the Secret
+    SignInDto:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          description: Unique username for each user
+        password:
+          type: string
+          description: Secret password for the user
+      example:
+        username: test
+        password: secret
+    TokenResponse:
+      type: object
+      required:
+        - token
+      properties:
+        token:
+          type: string
+          description: JWT Token for the user
+      example:
+        token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NWJhMzhmZjE1MzhkZjhlMjYyNGZjZSIsImlhdCI6MTY4Mzc0MDg3NCwiZXhwIjoxNjkyMzgwODc0fQ.rm-FMbOeeBkSCL1R20veGq0UkaQtojCQFWbVNlTEB3Y
+    ErrorResponse:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          description: Error message
+      example:
+        message: "Error message"
+    DuplicateErrorResponse:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          description: Error message
+      example:
+        message: "The username is in use by other user"
+    IncompleteErrorResponse:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          description: Error message
+      example:
+        message: "[...required stuff] is required!"

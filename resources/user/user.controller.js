@@ -55,9 +55,7 @@ module.exports = {
       } else {
         // user exist, generate token
         const token = newToken(user);
-        res
-          .status(200)
-          .send({ token, fullName: user.fullName, role: user.role });
+        res.status(200).send({ token });
       }
     } catch (e) {
       console.error(e);
@@ -94,7 +92,7 @@ module.exports = {
       if (e.code === 11000) {
         return res
           .status(409)
-          .send({ message: "Your new username is in use by other user" });
+          .send({ message: "The username is in use by other user" });
       } else {
         console.error(e);
         return res.status(400).end();

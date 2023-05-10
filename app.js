@@ -3,9 +3,11 @@ const express = require("express");
 const path = require("path");
 const logger = require("morgan");
 const mongoose = require("mongoose");
+const swaggerUi = require("swagger-ui-express");
 const cors = require("cors");
 require("dotenv").config();
 
+const swaggerSpecs = require("./swaggerSpecs");
 const userRouter = require("./resources/user/user.router");
 const postRouter = require("./resources/user/user.router");
 
@@ -24,8 +26,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // Routing
 
-// app.use("/", indexRouter);
-app.get("/", (req, res) => res.send("hello world"));
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 app.use("/user", userRouter);
 app.use("/post", postRouter);
 

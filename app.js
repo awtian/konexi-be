@@ -9,7 +9,9 @@ require("dotenv").config();
 
 const swaggerSpecs = require("./swaggerSpecs");
 const userRouter = require("./resources/user/user.router");
-const postRouter = require("./resources/user/user.router");
+const postRouter = require("./resources/post/post.router");
+
+const uploadHandler = require("./utils/uploadHandler");
 
 const app = express();
 
@@ -26,6 +28,10 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // Routing
 
+app.post("/upload", uploadHandler.single("image"), function (req, res) {
+  console.log(req);
+  res.json({ content: req.body.content, file: req.file });
+});
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 app.use("/user", userRouter);
 app.use("/post", postRouter);

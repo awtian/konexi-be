@@ -59,4 +59,29 @@ module.exports = {
       return res.status(400).send({ message: e.message });
     }
   },
+  delete: async (req, res) => {
+    try {
+      const filter = { author: req.user.id, _id: req.params.id };
+      const deleted = await Post.findOneAndDelete(filter, {
+        populate: "author",
+      });
+
+      if (deleted) {
+        deleted.author = {
+          fullName: deleted.author.fullName,
+          username: deleted.author.username,
+        };
+
+        res.status(200).send({ message: "succesfully deleted", post: deleted });
+      } else {
+        res.status(400).send({
+          message:
+            "Cannot delete, you might be not authorized or the data does not exist",
+        });
+      }
+    } catch (e) {
+      console.error(e);
+      return res.status(400).send({ message: e.message });
+    }
+  },
 };

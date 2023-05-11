@@ -2,8 +2,9 @@ const { Router } = require("express");
 const router = Router();
 
 const uploadHandler = require.main.require("../utils/uploadHandler");
+const { auth } = require.main.require("../utils/auth");
 
-const controllers = require("./post.controller");
+const controller = require("./post.controller");
 
 /**
  * @swagger
@@ -58,6 +59,8 @@ const controllers = require("./post.controller");
  *              schema:
  *                $ref: '#/components/schemas/ErrorResponse'
  */
-router.post("/", uploadHandler.single("image"), controllers.create);
+router.post("/", uploadHandler.single("image"), auth, controller.create);
+router.get("/:id", controller.findById);
+router.patch("/:id", uploadHandler.single("image"), auth, controller.update);
 
 module.exports = router;

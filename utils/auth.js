@@ -15,9 +15,11 @@ const verifyToken = (token) =>
     });
   });
 
-const protect = async (req, res, next) => {
+const auth = async (req, res, next) => {
   if (!req.headers.authorization) {
-    return res.status(401).send({ message: "Not auth: Token does not exist" });
+    return res
+      .status(401)
+      .send({ message: "Not auth: Token is invalid or on a wrong format" });
   }
 
   let token = req.headers.authorization.split("Bearer ")[1];
@@ -25,61 +27,23 @@ const protect = async (req, res, next) => {
   if (!token) {
     return res
       .status(401)
-      .send({ message: "Not auth: Token is on a wrong format" });
+      .send({ message: "Not auth: Token is invalid or on a wrong format" });
   }
 
   try {
-    const payload = await verifyToken(token);
-    const user = await User.findById(payload.id)
-      .select("-password")
-      .lean()
-      .exec();
-    if (user) {
-      req.user = user;
-      next();
-    } else {
-      res.status(401).send({ message: "Not auth: Invalid token" });
-    }
+    const verified = await verifyToken(token);
+    req.user = { id: verified.id };
+    next();
   } catch (e) {
-    res.status(500).send(e);
     console.error(e);
-  }
-};
-
-const admin = async (req, res, next) => {
-  if (!req.headers.authorization) {
-    return res.status(401).send({ message: "Not auth: Token does not exist" });
-  }
-
-  let token = req.headers.authorization.split("Bearer ")[1];
-
-  if (!token) {
-    return res
+    res
       .status(401)
-      .send({ message: "Not auth: Token is on a wrong format" });
-  }
-
-  try {
-    const payload = await verifyToken(token);
-    const user = await user
-      .findById(payload.id)
-      .select("-password")
-      .lean()
-      .exec();
-    if (user && user.role < 5) {
-      req.user = user;
-      next();
-    } else {
-      res.status(401).send({ message: "Not auth: Invalid token" });
-    }
-  } catch (e) {
-    console.error(e);
+      .send({ message: "Not auth: Token is invalid or on a wrong format" });
   }
 };
 
 module.exports = {
   newToken,
   verifyToken,
-  protect,
-  admin,
+  auth,
 };

@@ -1,5 +1,6 @@
 const { newToken, verifyToken } = require("../../utils/auth");
 const { User } = require("./user.model");
+const { Follow } = require("./follow.model");
 
 module.exports = {
   signup: async (req, res) => {
@@ -97,6 +98,43 @@ module.exports = {
         console.error(e);
         return res.status(400).end();
       }
+    }
+  },
+  follow: async (req, res) => {
+    try {
+      const payload = {
+        follower: req.user.id,
+        followed: req.params.id,
+      };
+
+      await Follow.create(payload);
+
+      res.status(201).send({ message: "successfully followed the user" });
+    } catch (e) {
+      if (e.code === 11000) {
+        res.status(409).send({ message: "you already followed this user" });
+      } else {
+        console.error(e);
+        return res.status(400).send({ message: e.message });
+      }
+    }
+  },
+  unfollow: async (req, res) => {
+    try {
+      const payload = {
+        follower: req.user.id,
+        followed: req.params.id,
+      };
+
+      const deleted = await Follow.findOneAndDelete(payload);
+      if (deleted) {
+        res.status(200).send({ message: "succesfully unfollow the user" });
+      } else {
+        res.status(404).send({ message: "you haven't followed the user" });
+      }
+    } catch (e) {
+      console.error(e);
+      return res.status(400).send({ message: e.message });
     }
   },
 };

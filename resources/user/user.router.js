@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const router = Router();
-
+const { auth } = require.main.require("../utils/auth");
 const controllers = require("./user.controller");
 
 /**
@@ -118,5 +118,8 @@ router.post("/signin", controllers.signin);
  
  */
 router.put("/", controllers.update);
+
+router.post("/follow/:id", auth, controllers.follow);
+router.delete("/follow/:id", auth, controllers.unfollow);
 
 module.exports = router;

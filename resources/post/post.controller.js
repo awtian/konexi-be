@@ -1,6 +1,7 @@
 const { Post } = require("./post.model");
 const { Comment } = require("./comment.model");
 const { Like } = require("./like.model");
+const { User } = require("../user/user.model");
 
 module.exports = {
   create: async (req, res) => {
@@ -159,12 +160,36 @@ module.exports = {
         post: req.params.id,
       };
 
-      await Like.findOneAndDelete(payload);
-
-      res.status(200).send({ message: "succesfully unliked the post" });
+      const deleted = await Like.findOneAndDelete(payload);
+      if (deleted) {
+        res.status(200).send({ message: "succesfully unliked the post" });
+      } else {
+        res.status(404).send({ message: "you haven't liked this post yet" });
+      }
     } catch (e) {
       console.error(e);
       return res.status(400).send({ message: e.message });
+    }
+  },
+  getFeed: async (req, res) => {
+    try {
+      let user = await User.findById(req.user.id);
+      user = await user.populate("followings", "followed");
+
+      const followingArray = user.followings.map((each) => each.followed);
+      // adding own post
+      followingArray.push(req.user.id);
+
+      const feed = await Post.find({ author: followingArray })
+        .sort({
+          createdAt: "desc",
+        })
+        .limit(10)
+        .populate("author", "fullName username");
+
+      res.send({ data: feed });
+    } catch (e) {
+      res.send(e);
     }
   },
 };

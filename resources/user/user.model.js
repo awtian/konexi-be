@@ -49,6 +49,21 @@ userSchema.methods.checkPassword = function (password) {
   });
 };
 
+userSchema.virtual("followings", {
+  ref: "Follow", //The Model to use
+  localField: "_id", //Find in Model, where localField
+  foreignField: "follower", // is equal to foreignField
+});
+
+userSchema.virtual("followers", {
+  ref: "Follow", //The Model to use
+  localField: "_id", //Find in Model, where localField
+  foreignField: "followed", // is equal to foreignField
+});
+
+userSchema.set("toObject", { virtuals: true });
+userSchema.set("toJSON", { virtuals: true });
+
 const User = mongoose.model("User", userSchema);
 
 module.exports = { User };

@@ -61,6 +61,8 @@ const controller = require("./post.controller");
  */
 router.post("/", uploadHandler.single("image"), auth, controller.create);
 
+router.get("/feed/", auth, controller.getFeed);
+
 /**
  * @swagger
  *  /post/{id}:

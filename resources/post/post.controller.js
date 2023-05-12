@@ -1,5 +1,6 @@
 const { Post } = require("./post.model");
 const { Comment } = require("./comment.model");
+const { Like } = require("./like.model");
 
 module.exports = {
   create: async (req, res) => {
@@ -39,6 +40,10 @@ module.exports = {
             path: "author",
             select: "username fullName",
           },
+        });
+
+        populatedPost = await populatedPost.populate({
+          path: "likes",
         });
 
         res.status(200).send(populatedPost);
@@ -123,6 +128,40 @@ module.exports = {
       });
 
       res.status(201).send(populatedComment);
+    } catch (e) {
+      console.error(e);
+      return res.status(400).send({ message: e.message });
+    }
+  },
+  like: async (req, res) => {
+    try {
+      const payload = {
+        liker: req.user.id,
+        post: req.params.id,
+      };
+
+      await Like.create(payload);
+
+      res.status(201).send({ message: "succesfully liked the post" });
+    } catch (e) {
+      if (e.code === 11000) {
+        res.status(409).send({ message: "You already liked this message" });
+      } else {
+        console.error(e);
+        return res.status(400).send({ message: e.message });
+      }
+    }
+  },
+  unlike: async (req, res) => {
+    try {
+      const payload = {
+        liker: req.user.id,
+        post: req.params.id,
+      };
+
+      await Like.findOneAndDelete(payload);
+
+      res.status(200).send({ message: "succesfully unliked the post" });
     } catch (e) {
       console.error(e);
       return res.status(400).send({ message: e.message });

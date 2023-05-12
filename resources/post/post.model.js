@@ -23,6 +23,13 @@ postSchema.virtual("comments", {
   foreignField: "post", // is equal to foreignField
 });
 
+postSchema.virtual("likes", {
+  ref: "Like", //The Model to use
+  localField: "_id", //Find in Model, where localField
+  foreignField: "post", // is equal to foreignField
+  count: true,
+});
+
 postSchema.set("toObject", { virtuals: true });
 postSchema.set("toJSON", { virtuals: true });
 

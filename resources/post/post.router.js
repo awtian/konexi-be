@@ -173,6 +173,12 @@ router.post("/", uploadHandler.single("image"), auth, controller.create);
 router.get("/:id", controller.findById);
 router.patch("/:id", uploadHandler.single("image"), auth, controller.update);
 router.delete("/:id", auth, controller.delete);
+
+// comment doc pending
 router.post("/:id/comment", auth, controller.comment);
+
+// like doc pending
+router.post("/:id/like", auth, controller.like);
+router.delete("/:id/like", auth, controller.unlike);
 
 module.exports = router;

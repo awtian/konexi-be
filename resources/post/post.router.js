@@ -19,7 +19,7 @@ const controller = require("./post.controller");
  *  post:
  *     tags: [Posts]
  *     summary: Endpoint to create a new post
- *     description: New post should have token as creator and at least have the content filled
+ *     description: New post should have token as creator and at least have the content filled  its buggy on swaggger please use insomnia/postman to hit the api
  *     parameters:
  *      - in: header
  *        required: true
@@ -173,5 +173,6 @@ router.post("/", uploadHandler.single("image"), auth, controller.create);
 router.get("/:id", controller.findById);
 router.patch("/:id", uploadHandler.single("image"), auth, controller.update);
 router.delete("/:id", auth, controller.delete);
+router.post("/:id/comment", auth, controller.comment);
 
 module.exports = router;

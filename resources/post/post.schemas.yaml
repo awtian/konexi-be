@@ -44,6 +44,10 @@ components:
           type: string
         updatedAt:
           type: string
+      encoding:
+        image:
+        contentType: "image/png, image/jpeg"
+        style: form
       example:
         _id: 645ba38ff1538df8e2624fce
         content: contententen

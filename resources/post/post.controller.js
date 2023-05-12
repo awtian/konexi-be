@@ -1,4 +1,5 @@
 const { Post } = require("./post.model");
+const { Comment } = require("./comment.model");
 
 module.exports = {
   create: async (req, res) => {
@@ -23,10 +24,18 @@ module.exports = {
     try {
       const id = req.params.id;
       const post = await Post.findById(id);
-      const populatedPost = await post.populate("author", [
+      let populatedPost = await post.populate("author", [
         "fullName",
         "username",
       ]);
+      populatedPost = await populatedPost.populate({
+        path: "comments",
+        select: "author comment",
+        populate: {
+          path: "author",
+          select: "username fullName -_id",
+        },
+      });
       res.status(200).send(populatedPost);
     } catch (e) {
       console.error(e);
@@ -79,6 +88,34 @@ module.exports = {
             "Cannot delete, you might be not authorized or the data does not exist",
         });
       }
+    } catch (e) {
+      console.error(e);
+      return res.status(400).send({ message: e.message });
+    }
+  },
+  comment: async (req, res) => {
+    try {
+      const payload = {
+        comment: req.body.comment,
+        author: req.user.id,
+        post: req.params.id,
+      };
+
+      const newComment = await Comment.create(payload);
+      const currentPost = await Post.findById(req.params.id);
+      currentPost.comments.push(newComment._id);
+      const commentedPost = await currentPost.save();
+
+      const populatedCommentedPost = await commentedPost.populate({
+        path: "comments",
+        select: "author comment",
+        populate: {
+          path: "author",
+          select: "username fullName -_id",
+        },
+      });
+
+      res.status(201).send(populatedCommentedPost);
     } catch (e) {
       console.error(e);
       return res.status(400).send({ message: e.message });

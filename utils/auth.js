@@ -19,7 +19,9 @@ const auth = async (req, res, next) => {
   if (!req.headers.authorization) {
     return res
       .status(401)
-      .send({ message: "Not auth: Token is invalid or on a wrong format" });
+      .send({
+        message: "Not auth: Token might be invalid or on a wrong format",
+      });
   }
 
   let token = req.headers.authorization.split("Bearer ")[1];
@@ -27,7 +29,9 @@ const auth = async (req, res, next) => {
   if (!token) {
     return res
       .status(401)
-      .send({ message: "Not auth: Token is invalid or on a wrong format" });
+      .send({
+        message: "Not auth: Token might be invalid or on a wrong format",
+      });
   }
 
   try {
@@ -38,7 +42,9 @@ const auth = async (req, res, next) => {
     console.error(e);
     res
       .status(401)
-      .send({ message: "Not auth: Token is invalid or on a wrong format" });
+      .send({
+        message: "Not auth: Token might be invalid or on a wrong format",
+      });
   }
 };
 

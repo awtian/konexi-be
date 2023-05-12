@@ -27,7 +27,7 @@ module.exports = {
         "fullName",
         "username",
       ]);
-      res.status(201).send(populatedPost);
+      res.status(200).send(populatedPost);
     } catch (e) {
       console.error(e);
       return res.status(400).send({ message: e.message });

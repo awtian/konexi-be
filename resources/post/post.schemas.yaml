@@ -23,6 +23,8 @@ components:
         - createdAt
         - updatedAt
       properties:
+        _id:
+          type: string
         content:
           type: string
         image:
@@ -43,6 +45,7 @@ components:
         updatedAt:
           type: string
       example:
+        _id: 645ba38ff1538df8e2624fce
         content: contententen
         image: https://storage.googleapis.com/awtstorage/1683875782696_panda.jpeg
         author:
@@ -51,3 +54,53 @@ components:
           username: test
         createdAt: "2023-05-12T07:16:24.935Z"
         updatedAt: "2023-05-12T07:16:24.935Z"
+    TokenErrorResponse:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          description: Error message
+      example:
+        message: "Not auth: Token might be invalid or on a wrong format"
+    DeleteResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "succesfully deleted"
+        data:
+          type: object
+          properties:
+            _id:
+              type: string
+            content:
+              type: string
+            image:
+              type: string
+              description: Image File (automatically converted into url string using GCP)
+            author:
+              type: object
+              description: User object
+              properties:
+                _id:
+                  type: string
+                fullName:
+                  type: string
+                username:
+                  type: string
+            createdAt:
+              type: string
+            updatedAt:
+              type: string
+          example:
+            _id: 645ba38ff1538df8e2624fce
+            content: contententen
+            image: https://storage.googleapis.com/awtstorage/1683875782696_panda.jpeg
+            author:
+              _id: 645ba38ff1538df8e2624fce
+              fullName: Awtian Akbar
+              username: test
+            createdAt: "2023-05-12T07:16:24.935Z"
+            updatedAt: "2023-05-12T07:16:24.935Z"

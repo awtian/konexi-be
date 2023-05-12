@@ -24,21 +24,25 @@ module.exports = {
     try {
       const postId = req.params.id;
       const post = await Post.findById(postId, "-createdAt");
-      let populatedPost = await post.populate("author", [
-        "fullName",
-        "username",
-      ]);
+      if (!post) {
+        res.status(404).send({ message: "Post does not exist" });
+      } else {
+        let populatedPost = await post.populate("author", [
+          "fullName",
+          "username",
+        ]);
 
-      populatedPost = await populatedPost.populate({
-        path: "comments",
-        select: "author comment -post",
-        populate: {
-          path: "author",
-          select: "username fullName",
-        },
-      });
+        populatedPost = await populatedPost.populate({
+          path: "comments",
+          select: "author comment -post",
+          populate: {
+            path: "author",
+            select: "username fullName",
+          },
+        });
 
-      res.status(200).send(populatedPost);
+        res.status(200).send(populatedPost);
+      }
     } catch (e) {
       console.error(e);
       return res.status(400).send({ message: e.message });

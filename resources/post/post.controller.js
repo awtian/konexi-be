@@ -23,7 +23,7 @@ module.exports = {
   findById: async (req, res) => {
     try {
       const postId = req.params.id;
-      const post = await Post.findById(postId);
+      const post = await Post.findById(postId, "-createdAt");
       let populatedPost = await post.populate("author", [
         "fullName",
         "username",
@@ -103,11 +103,20 @@ module.exports = {
         post: req.params.id,
       };
 
-      res.send(payload);
-
       const newComment = await Comment.create(payload);
 
-      const populatedComment = await newComment.populate("post");
+      let populatedComment = await newComment.populate(
+        "author",
+        "username fullName -_id"
+      );
+      populatedComment = await newComment.populate({
+        path: "post",
+        select: "content author",
+        populate: {
+          path: "author",
+          select: "username fullName -_id",
+        },
+      });
 
       res.status(201).send(populatedComment);
     } catch (e) {

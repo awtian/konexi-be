@@ -145,7 +145,7 @@ module.exports = {
       res.status(201).send({ message: "succesfully liked the post" });
     } catch (e) {
       if (e.code === 11000) {
-        res.status(409).send({ message: "You already liked this message" });
+        res.status(409).send({ message: "You already liked this post" });
       } else {
         console.error(e);
         return res.status(400).send({ message: e.message });

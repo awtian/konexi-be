@@ -22,20 +22,22 @@ module.exports = {
   },
   findById: async (req, res) => {
     try {
-      const id = req.params.id;
-      const post = await Post.findById(id);
+      const postId = req.params.id;
+      const post = await Post.findById(postId);
       let populatedPost = await post.populate("author", [
         "fullName",
         "username",
       ]);
+
       populatedPost = await populatedPost.populate({
         path: "comments",
-        select: "author comment",
+        select: "author comment -post",
         populate: {
           path: "author",
-          select: "username fullName -_id",
+          select: "username fullName",
         },
       });
+
       res.status(200).send(populatedPost);
     } catch (e) {
       console.error(e);
@@ -101,21 +103,13 @@ module.exports = {
         post: req.params.id,
       };
 
+      res.send(payload);
+
       const newComment = await Comment.create(payload);
-      const currentPost = await Post.findById(req.params.id);
-      currentPost.comments.push(newComment._id);
-      const commentedPost = await currentPost.save();
 
-      const populatedCommentedPost = await commentedPost.populate({
-        path: "comments",
-        select: "author comment",
-        populate: {
-          path: "author",
-          select: "username fullName -_id",
-        },
-      });
+      const populatedComment = await newComment.populate("post");
 
-      res.status(201).send(populatedCommentedPost);
+      res.status(201).send(populatedComment);
     } catch (e) {
       console.error(e);
       return res.status(400).send({ message: e.message });

@@ -13,10 +13,18 @@ const postSchema = new Schema(
       type: String,
       required: false,
     },
-    comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
   },
   { timestamps: true }
 );
+
+postSchema.virtual("comments", {
+  ref: "Comment", //The Model to use
+  localField: "_id", //Find in Model, where localField
+  foreignField: "post", // is equal to foreignField
+});
+
+postSchema.set("toObject", { virtuals: true });
+postSchema.set("toJSON", { virtuals: true });
 
 const Post = mongoose.model("Post", postSchema);
 

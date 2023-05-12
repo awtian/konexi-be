@@ -187,9 +187,18 @@ module.exports = {
         .limit(10)
         .populate("author", "fullName username");
 
-      res.send({ data: feed });
+      res.status(200).send({ data: feed });
     } catch (e) {
-      res.send(e);
+      return res.status(400).send({ message: e.message });
+    }
+  },
+  getPosts: async (req, res) => {
+    try {
+      const posts = await Post.find({ content: { $regex: req.query.search } });
+      res.status(200).send(posts);
+    } catch (e) {
+      console.log(e);
+      return res.status(400).send({ message: e.message });
     }
   },
 };

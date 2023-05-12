@@ -30,24 +30,20 @@ const controller = require("./post.controller");
  *     requestBody:
  *      required: true
  *      content:
- *       application/json:
+ *       multipart/formdata:
  *         schema:
- *            $ref: '#/components/schemas/SignUpDto'
+ *            $ref: '#/components/schemas/PostSchemaDto'
  *     responses:
- *       '200':
- *          description: Ok
+ *       '201':
+ *          description: Ok (created new post)
  *          content:
  *            application/json:
  *              schema:
- *                $ref: '#/components/schemas/TokenResponse'
- *       '409':
- *          description: Duplicate username
- *          content:
- *            application/json:
- *              schema:
- *                $ref: '#/components/schemas/DuplicateErrorResponse'
+ *                $ref: '#/components/schemas/PostSchema'
+ *       '401':
+ *          description: Unauthorized (invalid token / format)
  *       '422':
- *          description: Incomplete user data
+ *          description: Incomplete form, content empty
  *          content:
  *            application/json:
  *              schema:

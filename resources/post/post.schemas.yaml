@@ -1,0 +1,53 @@
+components:
+  schemas:
+    PostSchemaDto:
+      type: object
+      required:
+        - content
+      properties:
+        content:
+          type: string
+          description: content string for the post
+        image:
+          type: string
+          format: base64
+          description: Image File (automatically converted into url string using GCP)
+      example:
+        content: contententen
+        image: (image file, converted into string automatically)
+    PostSchema:
+      type: object
+      required:
+        - content
+        - author
+        - createdAt
+        - updatedAt
+      properties:
+        content:
+          type: string
+        image:
+          type: string
+          description: Image File (automatically converted into url string using GCP)
+        author:
+          type: object
+          description: User object
+          properties:
+            _id:
+              type: string
+            fullName:
+              type: string
+            username:
+              type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+      example:
+        content: contententen
+        image: https://storage.googleapis.com/awtstorage/1683875782696_panda.jpeg
+        author:
+          _id: 645ba38ff1538df8e2624fce
+          fullName: Awtian Akbar
+          username: test
+        createdAt: "2023-05-12T07:16:24.935Z"
+        updatedAt: "2023-05-12T07:16:24.935Z"

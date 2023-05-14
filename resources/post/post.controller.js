@@ -187,7 +187,8 @@ module.exports = {
         .sort({
           createdAt: "desc",
         })
-        .populate("author", "fullName username");
+        .populate("author", "fullName username")
+        .populate("likes");
 
       res.status(200).send({ data: feed });
     } catch (e) {
@@ -212,10 +213,13 @@ module.exports = {
         },
         {},
         {
-          populate: {
-            path: "author",
-            select: "fullName username",
-          },
+          populate: [
+            {
+              path: "author",
+              select: "fullName username",
+            },
+            { path: "likes" },
+          ],
         }
       );
       res.status(200).send({ data: posts });

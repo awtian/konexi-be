@@ -19,6 +19,10 @@ const options = {
     },
     servers: [
       {
+        url: "http://35.247.142.4:3001/",
+        description: "Deployment demo",
+      },
+      {
         url: "http://localhost:3001",
         description: "Localhost dev server",
       },

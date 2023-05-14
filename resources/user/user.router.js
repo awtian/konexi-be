@@ -119,6 +119,65 @@ router.post("/signin", controllers.signin);
  */
 router.put("/", controllers.update);
 
+/**
+ * @swagger
+ *  /user/follow/{id}:
+ *  post:
+ *     tags: [User]
+ *     summary: Endpoint to follow based on id
+ *     parameters:
+ *      - in: path
+ *        required: true
+ *        name: id
+ *        description: user id to follow
+ *        schema:
+ *          type: string
+ *     responses:
+ *       '201':
+ *          description: Ok (followed)
+ *       '409':
+ *          description: Conflict (followed already)
+ *       '401':
+ *          description: Unauthorized (invalid token / format)
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/TokenErrorResponse'
+ *       '400':
+ *          description: Bad request
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/ErrorResponse'
+ *  delete:
+ *     tags: [User]
+ *     summary: Endpoint to unfollow based on id
+ *     parameters:
+ *      - in: path
+ *        required: true
+ *        name: id
+ *        description: user id to unfollow
+ *        schema:
+ *          type: string
+ *     responses:
+ *       '200':
+ *          description: Ok (unfollowed)
+ *       '401':
+ *          description: Unauthorized (invalid token / format)
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/TokenErrorResponse'
+ *       '404':
+ *          description: follow not found
+ *       '400':
+ *          description: Bad request
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/ErrorResponse'
+ */
+
 router.post("/follow/:id", auth, controllers.follow);
 router.delete("/follow/:id", auth, controllers.unfollow);
 

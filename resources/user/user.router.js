@@ -24,7 +24,7 @@ const controllers = require("./user.controller");
  *         schema:
  *            $ref: '#/components/schemas/SignUpDto'
  *     responses:
- *       '200':
+ *       '201':
  *          description: Ok
  *          content:
  *            application/json:

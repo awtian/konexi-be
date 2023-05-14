@@ -117,14 +117,14 @@ module.exports = {
 
       let populatedComment = await newComment.populate(
         "author",
-        "username fullName -_id"
+        "username fullName"
       );
       populatedComment = await newComment.populate({
         path: "post",
         select: "content author",
         populate: {
           path: "author",
-          select: "username fullName -_id",
+          select: "username fullName",
         },
       });
 

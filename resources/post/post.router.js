@@ -15,6 +15,13 @@ const controller = require("./post.controller");
 
 /**
  * @swagger
+ * tags:
+ *  name: PostsAddons
+ *  description: The post addons (likes, comment)
+ */
+
+/**
+ * @swagger
  *  /post/:
  *  post:
  *     tags: [Posts]
@@ -23,7 +30,7 @@ const controller = require("./post.controller");
  *     requestBody:
  *      required: true
  *      content:
- *       multipart/formdata:
+ *       application/x-www-form-urlencoded:
  *         schema:
  *            $ref: '#/components/schemas/PostSchemaDto'
  *     responses:
@@ -221,10 +228,108 @@ router.get("/:id", controller.findById);
 router.patch("/:id", uploadHandler.single("image"), auth, controller.update);
 router.delete("/:id", auth, controller.delete);
 
-// comment doc pending
+/**
+ * @swagger
+ *  /post/{id}/comment:
+ *  post:
+ *     tags: [Posts, PostsAddons]
+ *     summary: Endpoint to create a new comment based on id
+ *     parameters:
+ *      - in: path
+ *        required: true
+ *        name: id
+ *        description: id of the post
+ *        schema:
+ *          type: string
+ *     requestBody:
+ *      required: true
+ *      content:
+ *       application/x-www-form-urlencoded:
+ *         schema:
+ *            $ref: '#/components/schemas/CommentSchemaDto'
+ *     responses:
+ *       '201':
+ *          description: Ok (created new comment)
+ *       '401':
+ *          description: Unauthorized (invalid token / format)
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/TokenErrorResponse'
+ *       '422':
+ *          description: Incomplete form, comment empty
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/IncompleteErrorResponse'
+ *       '400':
+ *          description: Bad request
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/ErrorResponse'
+ */
+
 router.post("/:id/comment", auth, controller.comment);
 
-// like doc pending
+/**
+ * @swagger
+ *  /post/{id}/like:
+ *  post:
+ *     tags: [Posts, PostsAddons]
+ *     summary: Endpoint to create a new like based on id
+ *     parameters:
+ *      - in: path
+ *        required: true
+ *        name: id
+ *        description: id of the post
+ *        schema:
+ *          type: string
+ *     responses:
+ *       '201':
+ *          description: Ok (created new like)
+ *       '409':
+ *          description: Conflict (liked already)
+ *       '401':
+ *          description: Unauthorized (invalid token / format)
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/TokenErrorResponse'
+ *       '400':
+ *          description: Bad request
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/ErrorResponse'
+ *  delete:
+ *     tags: [Posts, PostsAddons]
+ *     summary: Endpoint to unlike based on id
+ *     parameters:
+ *      - in: path
+ *        required: true
+ *        name: id
+ *        description: id of the post
+ *        schema:
+ *          type: string
+ *     responses:
+ *       '200':
+ *          description: Ok (created new like)
+ *       '401':
+ *          description: Unauthorized (invalid token / format)
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/TokenErrorResponse'
+ *       '404':
+ *          description: Like not found
+ *       '400':
+ *          description: Bad request
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/ErrorResponse'
+ */
 router.post("/:id/like", auth, controller.like);
 router.delete("/:id/like", auth, controller.unlike);
 

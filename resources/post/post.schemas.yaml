@@ -17,6 +17,17 @@ components:
       example:
         content: contententen
         image: (image file, converted into string automatically)
+    CommentSchemaDto:
+      type: object
+      required:
+        - comment
+      properties:
+        comment:
+          type: string
+          description: comment string for the post
+      example:
+        content: commentmentment
+        image: (image file, converted into string automatically)
     PostSchema:
       type: object
       required:

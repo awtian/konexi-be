@@ -2,6 +2,8 @@ components:
   schemas:
     PostSchemaDto:
       type: object
+      additionalProperties:
+        type: string
       required:
         - content
       properties:
@@ -9,8 +11,8 @@ components:
           type: string
           description: content string for the post
         image:
-          type: string
-          format: base64
+          type: file
+          format: binary
           description: Image File (automatically converted into url string using GCP)
       example:
         content: contententen

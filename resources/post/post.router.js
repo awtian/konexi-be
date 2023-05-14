@@ -20,13 +20,6 @@ const controller = require("./post.controller");
  *     tags: [Posts]
  *     summary: Endpoint to create a new post
  *     description: New post should have token as creator and at least have the content filled  its buggy on swaggger please use insomnia/postman to hit the api
- *     parameters:
- *      - in: header
- *        required: true
- *        name: authorization
- *        description: Token for the app, should be written as Bearer(space)[token]
- *        schema:
- *          $ref: '#/components/schemas/HeaderTokenDto'
  *     requestBody:
  *      required: true
  *      content:
@@ -73,9 +66,12 @@ const controller = require("./post.controller");
  *          content:
  *            application/json:
  *              schema:
- *                type: array
- *                items:
- *                  $ref: '#/components/schemas/PostSchema'
+ *                type: object
+ *                properties:
+ *                  data:
+ *                    type: array
+ *                    items:
+ *                      $ref: '#/components/schemas/PostSchema'
  *       '400':
  *          description: Bad request
  *          content:
@@ -85,7 +81,43 @@ const controller = require("./post.controller");
  */
 router.post("/", uploadHandler.single("image"), auth, controller.create);
 router.get("/", controller.getPosts);
-
+/**
+ * @swagger
+ *  /post/feed:
+ *  get:
+ *     tags: [Posts]
+ *     summary: Get feed (user own post and followed users)
+ *     description: New post should have token as identifier
+ *     securityDefinitions:
+ *       authentication:
+ *          type: apiKey
+ *          name: Authorization
+ *          in: header
+ *     responses:
+ *       '200':
+ *          description: Ok
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  data:
+ *                    type: array
+ *                    items:
+ *                      $ref: '#/components/schemas/PostSchema'
+ *       '401':
+ *          description: Unauthorized (invalid token / format)
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/TokenErrorResponse'
+ *       '400':
+ *          description: Bad request
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/ErrorResponse'
+ */
 router.get("/feed/", auth, controller.getFeed);
 
 /**
@@ -124,12 +156,6 @@ router.get("/feed/", auth, controller.getFeed);
  *        description: id of the post
  *        schema:
  *          type: string
- *      - in: header
- *        required: true
- *        name: authorization
- *        description: MUST be the post owner's token
- *        schema:
- *          $ref: '#/components/schemas/HeaderTokenDto'
  *     requestBody:
  *      required: true
  *      content:
@@ -171,12 +197,6 @@ router.get("/feed/", auth, controller.getFeed);
  *        description: id of the post
  *        schema:
  *          type: string
- *      - in: header
- *        required: true
- *        name: authorization
- *        description: MUST be the post owner's token
- *        schema:
- *          $ref: '#/components/schemas/HeaderTokenDto'
  *     responses:
  *       '200':
  *          description: Ok (post deleted)

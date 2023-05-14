@@ -1,7 +1,7 @@
 const swaggerJsdoc = require("swagger-jsdoc");
 const options = {
   definition: {
-    openapi: "3.0.0",
+    openapi: "3.0.3",
     info: {
       title: "Simple Social Media API for konexi.io test",
       version: "0.1.0",
@@ -21,6 +21,20 @@ const options = {
       {
         url: "http://localhost:3001",
         description: "Localhost dev server",
+      },
+    ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+        },
+      },
+    },
+    security: [
+      {
+        bearerAuth: [],
       },
     ],
   },

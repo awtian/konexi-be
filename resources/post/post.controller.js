@@ -174,9 +174,12 @@ module.exports = {
   getFeed: async (req, res) => {
     try {
       let user = await User.findById(req.user.id);
-      user = await user.populate("followings", "followed");
+      let followingArray = [];
+      if (user) {
+        user = await user.populate("followings", "followed");
 
-      const followingArray = user.followings.map((each) => each.followed);
+        followingArray = user.followings.map((each) => each.followed);
+      }
       // adding own post
       followingArray.push(req.user.id);
 
@@ -184,7 +187,6 @@ module.exports = {
         .sort({
           createdAt: "desc",
         })
-        .limit(10)
         .populate("author", "fullName username");
 
       res.status(200).send({ data: feed });
@@ -216,7 +218,7 @@ module.exports = {
           },
         }
       );
-      res.status(200).send(posts);
+      res.status(200).send({ data: posts });
     } catch (e) {
       console.log(e);
       return res.status(400).send({ message: e.message });

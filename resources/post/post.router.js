@@ -58,10 +58,34 @@ const controller = require("./post.controller");
  *            application/json:
  *              schema:
  *                $ref: '#/components/schemas/ErrorResponse'
+ *  get:
+ *     tags: [Posts]
+ *     summary: Endpoint to get all post / searchable post
+ *     parameters:
+ *      - in: query
+ *        name: search
+ *        description: Search keyword (content, author username, author fullname)
+ *        schema:
+ *          type: string
+ *     responses:
+ *       '200':
+ *          description: Ok
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: array
+ *                items:
+ *                  $ref: '#/components/schemas/PostSchema'
+ *       '400':
+ *          description: Bad request
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/ErrorResponse'
  */
 router.post("/", uploadHandler.single("image"), auth, controller.create);
-
 router.get("/", controller.getPosts);
+
 router.get("/feed/", auth, controller.getFeed);
 
 /**

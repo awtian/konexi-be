@@ -194,7 +194,28 @@ module.exports = {
   },
   getPosts: async (req, res) => {
     try {
-      const posts = await Post.find({ content: { $regex: req.query.search } });
+      const search = new RegExp(req.query.search, "gi");
+
+      // getting user by username and full name with the id equal to
+      const searchByUser = await User.find({
+        $or: [
+          { username: { $regex: search } },
+          { fullName: { $regex: search } },
+        ],
+      }).select("_id");
+
+      const posts = await Post.find(
+        {
+          $or: [{ content: { $regex: search } }, { author: searchByUser }],
+        },
+        {},
+        {
+          populate: {
+            path: "author",
+            select: "fullName username",
+          },
+        }
+      );
       res.status(200).send(posts);
     } catch (e) {
       console.log(e);
